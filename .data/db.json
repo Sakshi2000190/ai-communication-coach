@@ -22,11 +22,25 @@
       "collegeOrCompany": "IIT Delhi / B.Tech CSE 2026",
       "targetRole": "Software Development Engineer",
       "role": "user",
-      "currentStreak": 3,
+      "currentStreak": 4,
       "highestStreak": 7,
-      "totalPractices": 5,
-      "lastPracticedAt": "2026-10-23T18:53:50.310Z",
+      "totalPractices": 6,
+      "lastPracticedAt": "2026-10-24T07:47:56.506Z",
       "createdAt": "2026-10-16T13:54:47.443Z"
+    },
+    "7a082e52-26f8-4598-acec-9113d943a907": {
+      "id": "7a082e52-26f8-4598-acec-9113d943a907",
+      "email": "verify_1792828076510@college.edu",
+      "passwordHash": "fb08b2242ce62a1a33ede63c103bba341ba5c7f587546a47ff031a47daf9f9ac",
+      "displayName": "Verification Student",
+      "collegeOrCompany": "IIT Verification",
+      "targetRole": "SDE Fresher",
+      "role": "user",
+      "currentStreak": 0,
+      "highestStreak": 0,
+      "totalPractices": 0,
+      "lastPracticedAt": null,
+      "createdAt": "2026-10-24T07:47:56.977Z"
     }
   },
   "practiceStats": [
@@ -134,6 +148,27 @@
       "gestureStatus": "expressive",
       "createdAt": "2026-10-23T19:29:42.160Z",
       "dateStr": "2026-10-23"
+    },
+    {
+      "id": "stat_21e880d8",
+      "userId": "fresher_arjun_02",
+      "userEmail": "arjun.sharma@college.edu",
+      "userName": "Arjun Sharma",
+      "topicId": "rt_social_media",
+      "topicTitle": "Is social media useful for students?",
+      "category": "Random Topic • Daily life and social issues",
+      "mode": "audio",
+      "score": 88,
+      "wpm": 0,
+      "fillerCount": 0,
+      "fillerRatePerMin": 0,
+      "wordCount": 46,
+      "durationSeconds": 0,
+      "primaryIssue": "Minimal personal storytelling",
+      "postureScore": null,
+      "gestureStatus": null,
+      "createdAt": "2026-10-24T07:47:56.506Z",
+      "dateStr": "2026-10-24"
     }
   ],
   "sessions": {
@@ -141,6 +176,8 @@
     "tok_596227882bc6f340811be08f68e1385fe06f71bafbce28be": "admin_sakshi_01",
     "tok_7fb265316e259d3bd27f787ffa3f1fbe96b4cfc703574290": "fresher_arjun_02",
     "tok_279732f3826ecf3955aa2b96a7bf8fa59852c5a695f6c6d6": "admin_sakshi_01",
-    "tok_5c0614091f7f4ef94697ed252a2545121e91e8fa7dd3aa29": "fresher_arjun_02"
+    "tok_5c0614091f7f4ef94697ed252a2545121e91e8fa7dd3aa29": "fresher_arjun_02",
+    "tok_315cfd843c48dcf04d5351542bd85e8a84114176660f0986": "fresher_arjun_02",
+    "sb_tok_N2EwODJlNTItMjZmOC00NTk4LWFjZWMtOTExM2Q5NDNhOTA3OjE3OTI4MjgwNzY5Nzc=": "7a082e52-26f8-4598-acec-9113d943a907"
   }
 }

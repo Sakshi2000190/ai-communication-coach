@@ -336,7 +336,11 @@ app.post('/api/auth/register', async (req, res) => {
 
   const { passwordHash: _, ...safeUser } = newUser;
   tokenUserCache.set(token, safeUser);
-  return res.json({ user: safeUser, token });
+  return res.json({
+    user: safeUser,
+    token,
+    authProvider: supabaseResult ? 'supabase' : 'local',
+  });
 });
 
 app.post('/api/auth/login', async (req, res) => {
@@ -369,13 +373,19 @@ app.post('/api/auth/login', async (req, res) => {
       }
     }
 
+    const isSeededDemo =
+      localUser.id === 'admin_sakshi_01' || localUser.id === 'fresher_arjun_02';
     const token = 'tok_' + crypto.randomBytes(24).toString('hex');
     db.sessions[token] = localUser.id;
     writeDb(db);
 
     const { passwordHash: _, ...safeUser } = localUser;
     tokenUserCache.set(token, safeUser);
-    return res.json({ user: safeUser, token });
+    return res.json({
+      user: safeUser,
+      token,
+      authProvider: isSeededDemo ? 'local-demo' : 'local-cached',
+    });
   }
 
   // 2. If not matched locally and Supabase is configured, verify against Supabase Auth
@@ -403,7 +413,7 @@ app.post('/api/auth/login', async (req, res) => {
       writeDb(db);
 
       tokenUserCache.set(result.token, result.user);
-      return res.json(result);
+      return res.json({ ...result, authProvider: 'supabase' });
     } catch (err: any) {
       supabaseErrorMsg = String(err?.message || '');
     }
@@ -518,7 +528,7 @@ app.post('/api/practice/save-stat', async (req, res) => {
         postureScore: safePosture,
         gestureStatus: gestureStatus ? String(gestureStatus).slice(0, 50) : null,
       });
-      return res.json({ success: true, ...result });
+      return res.json({ success: true, storage: 'supabase', ...result });
     } catch (err: any) {
       console.warn('Supabase save error, falling back to local store:', err.message);
     }
@@ -575,6 +585,7 @@ app.post('/api/practice/save-stat', async (req, res) => {
 
   return res.json({
     success: true,
+    storage: 'local',
     stat: newStat,
     streak: userObj?.currentStreak || 1,
     totalPractices: userObj?.totalPractices || 1,
@@ -593,6 +604,7 @@ app.get('/api/practice/my-stats', async (req, res) => {
       if (stats && stats.length > 0) {
         return res.json({
           stats,
+          storage: 'supabase',
           streak: user.currentStreak || 0,
           highestStreak: user.highestStreak || 0,
           totalPractices: user.totalPractices || stats.length,
@@ -613,6 +625,7 @@ app.get('/api/practice/my-stats', async (req, res) => {
 
   return res.json({
     stats: myStats,
+    storage: 'local',
     streak: userObj.currentStreak || 0,
     highestStreak: userObj.highestStreak || 0,
     totalPractices: userObj.totalPractices || myStats.length,
@@ -1086,9 +1099,10 @@ Return a JSON object with:
 13. "immediatePracticeChallenge": One specific 60-second speaking challenge the user can do right now.
 14. "sevenDayPlan": Array of 7 strings (Day 1 through Day 7) providing a daily improvement plan tailored to ${practiceMode === 'random' ? 'spontaneous speaking and fluency' : 'interview mastery'}.`;
 
+        const activeGeminiModel = 'gemini-3-flash-preview';
         const response = await withTimeout(
           ai.models.generateContent({
-            model: 'gemini-3.8-flash',
+            model: activeGeminiModel,
             contents: prompt,
             config: {
               thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
@@ -1149,7 +1163,7 @@ Return a JSON object with:
               },
             },
           }),
-          25000,
+          20000,
           'Gemini coaching evaluation'
         );
 
@@ -1160,14 +1174,14 @@ Return a JSON object with:
         analysis.score = Math.min(100, Math.max(0, Math.round(Number(analysis.score) || 72)));
         analysis.practiceMode = practiceMode;
         analysis.learningResources = defaultFallback.learningResources;
-        analysis.engine = 'gemini-3.8-flash';
+        analysis.engine = activeGeminiModel;
         analysis.isFallback = false;
         analysis.quotaExceeded = false;
 
         // Prompt, audio, and transcript are never written to any database
         return res.json({
           analysis,
-          engine: 'gemini-3.8-flash',
+          engine: activeGeminiModel,
           isFallback: false,
           quotaExceeded: false,
         });

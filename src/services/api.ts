@@ -104,7 +104,7 @@ export async function savePracticeStat(payload: {
   primaryIssue: string;
   postureScore?: number | null;
   gestureStatus?: string | null;
-}): Promise<{ stat: PracticeStat; streak: number; totalPractices: number }> {
+}): Promise<{ stat: PracticeStat; streak: number; totalPractices: number; storage?: 'supabase' | 'local' }> {
   const modePrefix = payload.practiceMode === 'random' ? 'Random Topic' : 'Interview';
   const rawCategory = (payload.category || '').trim();
   const formattedCategory =

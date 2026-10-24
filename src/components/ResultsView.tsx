@@ -51,6 +51,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
   const [isSaved, setIsSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [savedStorage, setSavedStorage] = useState<'supabase' | 'local' | null>(null);
 
   const effectivePracticeMode: PracticeMode =
     stats.practiceMode ||
@@ -107,6 +108,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
         gestureStatus: stats.gestureStatus,
       });
       setIsSaved(true);
+      setSavedStorage(res.storage || 'local');
       onSaved(res.streak);
     } catch (err: any) {
       setSaveError(err?.message || 'Failed to sync practice stats to your profile.');
@@ -157,7 +159,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                   : 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/25'
               }`}>
                 {!analysis.isFallback && analysis.engine.startsWith('gemini')
-                  ? '✨ Evaluated with Gemini AI (3.8 Flash)'
+                  ? `✨ Evaluated with Gemini AI (${analysis.engine})`
                   : '⚠️ Fallback Analysis (Rule-Based · Not Gemini AI)'}
               </span>
             )}
@@ -530,11 +532,26 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               >
                 <span>Sign In to Save Streak</span>
               </button>
-            ) : (
+            ) : saving ? (
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
+                <span>Saving practice statistics...</span>
+              </div>
+            ) : isSaved ? (
               <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
                 <Check className="w-4 h-4" />
-                <span>Saved to your profile &amp; streak!</span>
+                <span>
+                  {savedStorage === 'supabase'
+                    ? 'Saved to Supabase Cloud (practice_stats & profile streak)!'
+                    : 'Saved to Local Store (Demo / Fallback Account)!'}
+                </span>
               </div>
+            ) : (
+              <button
+                onClick={handleSave}
+                className="py-2.5 px-4 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md flex items-center gap-1.5 transition-all"
+              >
+                <span>Retry Saving Stats</span>
+              </button>
             )}
 
             <button
