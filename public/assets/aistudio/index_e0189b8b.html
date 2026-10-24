@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Communication Coach</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><div class="logo">✦</div> AI Communication Coach</div>
+  <nav class="nav">
+    <button class="active" data-page="home">Home</button>
+    <button data-page="history">History</button>
+    <button data-page="resources">Resources</button>
+  </nav>
+  <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode">🌙</button>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="page active">
+  <div class="hero">
+    <div>
+      <h1 id="greet">Hi there! 👋</h1>
+      <div class="tag">Better communication. Brighter opportunities.</div>
+      <p>Practice daily, get AI-powered feedback and improve your Hinglish communication skills.</p>
+      <button class="link-btn" id="setName">Set your name</button>
+    </div>
+    <div class="hero-art"><div class="chip">Speak<br>Improve<br>Grow</div><div class="bubble">🎙️</div></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-icon">🔥</div><div><small>Current Streak</small><strong id="streakValue">0 days</strong><span class="sub" id="streakSub">Start today!</span></div></div>
+    <div class="stat"><div class="stat-icon">⭐</div><div><small>Last Score</small><strong id="lastScore">—</strong><span class="sub mutedsub" id="lastScoreSub">No practice yet</span></div></div>
+  </div>
+
+  <button class="btn-primary btn-block" id="startHome">Start Today's Practice →</button>
+
+  <div class="section-head"><h2>Your Progress</h2><button class="link-btn" data-goto="history" style="margin:0;text-decoration:none">View History →</button></div>
+  <div class="grid2">
+    <div class="prog"><span class="muted">Day 1</span><strong id="firstScore">—</strong><small class="muted" id="firstSub">Not started</small><div class="bar"><span id="firstBar" style="width:0%"></span></div></div>
+    <div class="prog"><span class="muted">Today</span><strong id="latestScore">—</strong><small class="muted">(Current)</small><div class="bar green"><span id="latestBar" style="width:0%"></span></div></div>
+  </div>
+</section>
+
+<!-- MODE -->
+<section id="mode" class="page"><div class="content">
+  <button class="back" data-goto="home">← Back</button>
+  <h1>Choose Your Mode</h1>
+  <p class="muted">Select how you want to practice today.</p>
+  <button class="choice selected" data-mode="video"><span class="choice-icon">📹</span><span><strong>Video + Audio</strong><small>Record with camera and mic. Get speech and posture analysis.</small><span class="pill" style="margin-top:6px">Recommended</span></span><span class="radio"></span></button>
+  <button class="choice" data-mode="audio"><span class="choice-icon">🎙️</span><span><strong>Only Audio</strong><small>Just record your voice. You'll get speech analysis only.</small></span><span class="radio"></span></button>
+  <button class="btn-primary btn-block" id="continueMode" style="margin-top:8px">Continue →</button>
+  <p class="notice">💡 Tip: Use a well-lit place and keep both shoulders in the frame. 🔒 Your recording stays in your browser and is never uploaded.</p>
+</div></section>
+
+<!-- TOPIC -->
+<section id="topic" class="page"><div class="content">
+  <button class="back" data-goto="mode">← Back</button>
+  <h1>Your Topic for Today</h1>
+  <p class="muted">Read the topic and go through the links before you start.</p>
+  <div class="card">
+    <div class="topic-head">
+      <div class="l"><div class="topic-icon" id="topicIcon">💼</div><h2 id="topicTitle">Tell me about yourself</h2></div>
+      <span class="pill" id="topicTag">Interview</span>
+    </div>
+    <p class="muted" id="topicDesc"></p>
+    <h3 style="margin-top:16px">Helpful Links</h3>
+    <div class="link-list" id="topicLinks"></div>
+  </div>
+  <button class="btn-primary btn-block" id="beginPractice">Start Recording →</button>
+</div></section>
+
+<!-- PRACTICE -->
+<section id="practice" class="page"><div class="content">
+  <button class="back" data-goto="topic">← Back</button>
+  <div class="card">
+    <div class="rec-row"><span id="recordStatus">Ready to record</span><span id="timerText">00:00 / 02:00</span></div>
+    <div class="bar"><span id="timerBar" style="width:0%"></span></div>
+  </div>
+
+  <div class="videobox" id="videoBox">
+    <video id="preview" autoplay muted playsinline></video>
+    <div id="videoPlaceholder"><div style="font-size:40px">📹</div><small>Camera preview will appear here</small></div>
+    <span class="posture-badge" id="postureBadge">Posture: —</span>
+  </div>
+
+  <button class="btn-primary btn-block" id="recordBtn">● Start Recording</button>
+  <button class="btn-danger btn-block hide" id="stopBtn">■ Stop Recording</button>
+
+  <div class="card" style="margin-top:14px">
+    <div class="rec-row"><strong>Live Transcript (Hinglish)</strong><span class="pill">Auto</span></div>
+    <div class="transcript" id="transcript">Your speech will appear here. If speech recognition is unavailable, type below.</div>
+    <details><summary>Type or edit your answer</summary><textarea id="manualTranscript" placeholder="Type/paste your speech here..."></textarea></details>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><small>Filler Words</small><strong id="mFiller">—</strong></div>
+    <div class="metric"><small>WPM</small><strong id="mWpm">—</strong></div>
+    <div class="metric"><small>Slouch Score</small><strong id="mSlouch">—</strong></div>
+  </div>
+
+  <h3 id="playbackHead" class="hide">Your recording</h3>
+  <video id="playback" class="media" controls playsinline></video>
+  <p class="notice" id="modeNotice"></p>
+  <button class="btn-primary btn-block" id="analyzeBtn" style="margin-top:12px">Analyze My Practice →</button>
+</div></section>
+
+<!-- RESULTS -->
+<section id="results" class="page"><div class="content">
+  <div class="center">
+    <div style="font-size:38px">🎉</div>
+    <h1 id="resTitle">Great Job!</h1>
+    <p class="muted">Here's your detailed analysis.</p>
+    <div class="ring" id="scoreRing"><div class="ring-in"><div><strong id="scoreNum">0%</strong><small class="muted">Overall Score</small></div></div></div>
+  </div>
+
+  <div class="fb good"><strong>⭐ What you did well</strong><ul id="strengthList"></ul></div>
+
+  <div class="card">
+    <span class="pill" style="background:rgba(240,80,90,.12);color:var(--red)">Your biggest problem</span>
+    <h2 id="mainName" style="margin-top:8px"></h2>
+    <p id="mainEvidence" class="muted"></p>
+    <p id="mainWhy"></p>
+    <h3>How to improve</h3>
+    <ol id="howList"></ol>
+    <h3>Practice this next time</h3>
+    <p id="practiceNext"></p>
+  </div>
+
+  <div class="card">
+    <h3>📅 Your 7-day starter plan</h3>
+    <ol id="planList"></ol>
+  </div>
+
+  <div class="fb ex" id="postureCard" style="display:none"><strong>🧍 Posture &amp; gestures</strong><div id="bodyText"></div></div>
+
+  <div class="fb bad"><strong>⚠️ Also needs work</strong><ul id="otherList"></ul></div>
+
+  <div class="metrics">
+    <div class="metric"><small>Filler Words</small><strong id="fillerNum">0</strong></div>
+    <div class="metric"><small>WPM</small><strong id="wpmNum">0</strong></div>
+    <div class="metric"><small>Words</small><strong id="wordNum">0</strong></div>
+  </div>
+
+  <div class="section-head"><h3 style="margin:0">📚 Learn from these platforms</h3><button class="link-btn" data-goto="resources" style="margin:0;text-decoration:none">View More →</button></div>
+  <div class="link-list" id="learnList"></div>
+  <p class="notice">These links open search results or the platform's homepage, so you can pick what suits you. Some tools (like Orai or Yoodli) may have paid features. This is a prototype: scores use simple rules, not a validated assessment.</p>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+    <button class="btn-primary" id="againBtn">Practice again</button>
+    <button class="btn-secondary" data-goto="history">View history</button>
+  </div>
+</div></section>
+
+<!-- HISTORY -->
+<section id="history" class="page"><div class="content">
+  <h1>Your Streak</h1>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:12px"><span style="font-size:38px">🔥</span><div><h2 id="streakBig">0 days</h2><span class="muted" id="streakMsg">Practice today to start your streak!</span></div></div>
+    <div class="week" id="weekRow"></div>
+  </div>
+
+  <div class="section-head"><h2>Performance History</h2></div>
+  <div class="card" id="histTable"><p class="muted">No sessions yet. Complete your first practice to see it here.</p></div>
+
+  <div class="section-head"><h2>Day 1 vs Today</h2></div>
+  <div class="card">
+    <div class="vs"><span style="width:50px">Day 1</span><div class="bar"><span id="histFirstBar" style="width:0%"></span></div><b id="histFirst">—</b></div>
+    <div class="vs"><span style="width:50px">Today</span><div class="bar green"><span id="histTodayBar" style="width:0%"></span></div><b id="histToday">—</b></div>
+  </div>
+
+  <button class="btn-whatsapp btn-block" id="shareBtn">💬 Share Progress on WhatsApp</button>
+  <button class="btn-secondary" id="clearHistory" style="margin-top:14px">Clear local history</button>
+</div></section>
+
+<!-- RESOURCES -->
+<section id="resources" class="page"><div class="content">
+  <h1>Practice Resources</h1>
+  <p class="muted">These links open YouTube search results. Pick the tutorial you like.</p>
+  <div class="link-list" id="resList"></div>
+</div></section>
+
+<div class="footer">AI Communication Coach · Practice privately, improve daily</div>
+</main>
+
+<nav class="bottomnav">
+  <button class="active" data-page="home"><span>🏠</span>Home</button>
+  <button data-page="history"><span>🕒</span>History</button>
+  <button data-page="resources"><span>📚</span>Resources</button>
+</nav>
+
+<script src="script.js"></script>
+</body>
+</html>

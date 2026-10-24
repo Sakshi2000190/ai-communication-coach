@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Communication Coach - Campus & Job Placement Prep</title>
+    <meta name="description" content="AI-powered communication, interview, and placement coach for Indian college students and freshers with real-time feedback, privacy-first audio/video analysis, and practice streak tracking." />
+    <meta property="og:title" content="AI Communication Coach - Campus & Job Placement Prep" />
+    <meta property="og:description" content="AI-powered communication, interview, and placement coach for Indian college students and freshers with real-time feedback, privacy-first audio/video analysis, and practice streak tracking." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      // Emscripten WebAssembly routes stderr to console.error by default.
+      // Re-route informational C++ delegate logs (e.g. "INFO: Created TensorFlow Lite XNNPACK delegate for CPU.")
+      // to console.info so they are not treated as runtime exceptions.
+      (function() {
+        var origError = console.error;
+        var origWarn = console.warn;
+        function isTfInfo(arg) {
+          if (typeof arg !== 'string') return false;
+          return (
+            arg.indexOf('XNNPACK delegate') !== -1 ||
+            arg.indexOf('TensorFlow Lite') !== -1 ||
+            arg.indexOf('INFO: Created') === 0 ||
+            arg.indexOf('INFO:') === 0
+          );
+        }
+        console.error = function() {
+          if (arguments.length > 0 && isTfInfo(arguments[0])) {
+            console.info.apply(console, arguments);
+            return;
+          }
+          origError.apply(console, arguments);
+        };
+        console.warn = function() {
+          if (arguments.length > 0 && isTfInfo(arguments[0])) {
+            console.info.apply(console, arguments);
+            return;
+          }
+          origWarn.apply(console, arguments);
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

@@ -1,0 +1,9 @@
+{
+  "name": "AI Communication Coach",
+  "description": "AI-powered communication, interview, and placement coach for Indian college students and freshers with real-time feedback, privacy-first audio/video analysis, and practice streak tracking.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,73 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account and profile data for communication coach.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique user ID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Full name or preferred name", "maxLength": 100 },
+        "collegeOrCompany": { "type": "string", "description": "College name or fresher status", "maxLength": 150 },
+        "targetRole": { "type": "string", "description": "Target job role (e.g. Software Engineer, BPO, Management Trainee)", "maxLength": 100 },
+        "role": { "type": "string", "description": "System role (user or admin)", "enum": ["user", "admin"] },
+        "currentStreak": { "type": "number", "description": "Current consecutive active practice days" },
+        "highestStreak": { "type": "number", "description": "Highest streak achieved" },
+        "totalPractices": { "type": "number", "description": "Total practice sessions completed" },
+        "lastPracticedAt": { "type": "string", "format": "date-time", "description": "Last practice timestamp" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last profile update timestamp" }
+      },
+      "required": ["uid", "email", "displayName", "role", "createdAt"]
+    },
+    "PracticeStat": {
+      "title": "PracticeStat",
+      "description": "Aggregated statistical scores and metrics for a single practice session. No video, audio or transcripts are stored.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Session stat ID" },
+        "userId": { "type": "string", "description": "Author UID" },
+        "topicId": { "type": "string", "description": "Interview or speech topic ID", "maxLength": 100 },
+        "topicTitle": { "type": "string", "description": "Title of practice prompt", "maxLength": 200 },
+        "category": { "type": "string", "description": "Category e.g. HR Interview, Group Discussion, Technical Intro", "maxLength": 100 },
+        "mode": { "type": "string", "description": "Practice mode used", "enum": ["video", "audio"] },
+        "score": { "type": "number", "description": "Overall communication score 0-100" },
+        "wpm": { "type": "number", "description": "Words per minute" },
+        "fillerCount": { "type": "number", "description": "Total detected filler words" },
+        "fillerRatePerMin": { "type": "number", "description": "Filler words per minute" },
+        "wordCount": { "type": "number", "description": "Total words spoken" },
+        "durationSeconds": { "type": "number", "description": "Length of practice session in seconds" },
+        "primaryIssue": { "type": "string", "description": "Key improvement area identified", "maxLength": 100 },
+        "postureScore": { "type": "number", "description": "Slouch score if video mode used (0.0 to 1.0)" },
+        "gestureStatus": { "type": "string", "description": "Gesture classification (good, stiff, fidgety, hidden)", "maxLength": 50 },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of practice" }
+      },
+      "required": ["id", "userId", "topicTitle", "score", "wpm", "fillerCount", "createdAt"]
+    },
+    "AdminRole": {
+      "title": "AdminRole",
+      "description": "Marker document indicating admin privileges for an authorized UID.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Admin UID" },
+        "email": { "type": "string", "description": "Admin email" },
+        "grantedAt": { "type": "string", "format": "date-time", "description": "Date granted" }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile collection partitioned by UID"
+    },
+    "/users/{userId}/practice_stats/{statId}": {
+      "schema": { "$ref": "#/entities/PracticeStat" },
+      "description": "Subcollection of statistical practice entries belonging to a user"
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminRole" },
+      "description": "Authorized administrators list"
+    }
+  }
+}
